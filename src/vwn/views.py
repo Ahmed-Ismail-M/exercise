@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -42,8 +43,9 @@ def index(request):
 
 
 def get_days(request):
-    exercises = Exercise.objects.all()
-    days = calculate_days(exercises=exercises)
+    currentMonth = datetime.now().month
+    exercises = Exercise.objects.all().filter(created_at__month__gte=currentMonth,) # filter days within the current month
+    days = calculate_days(exercises=exercises) #calculate days
     return HttpResponse(
         json.dumps({'total days': days}),
         content_type="application/json",
