@@ -15,12 +15,12 @@ class IndexTest(TestCase):
         data = {"exerciseName": "test", "hours": 2, "mins": 3}
         json_data = json.dumps(data)
         response = self.client.post(
-            "/", data=json_data, content_type="application/json"
+            "/api/v1/exercises", data=json_data, content_type="application/json"
         )
         self.assertEqual(response.content.decode("utf-8"), data["exerciseName"])
 
     def test2_index(self):
-        response = self.client.get("/")
+        response = self.client.get("/api/v1/exercises")
         self.assertEqual(
             response.content,
             b"Please provide exerciseName(string),hours(tinyint),mins(tinyint))",
@@ -30,7 +30,7 @@ class IndexTest(TestCase):
         data = {"exerciseName": "test"}
         json_data = json.dumps(data)
         response = self.client.post(
-            "/", data=json_data, content_type="application/json"
+            "/api/v1/exercises", data=json_data, content_type="application/json"
         )
         self.assertEqual(
             response.content.decode("utf-8"),
@@ -38,7 +38,7 @@ class IndexTest(TestCase):
         )
 
     def test4_get_days(self):
-        response = self.client.get("/exercises")
+        response = self.client.get("/api/v1/exercises/days")
         self.assertEqual(
             response.content.decode("utf-8"),
             json.dumps({"total days": 1.0}),
