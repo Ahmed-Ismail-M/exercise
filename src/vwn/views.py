@@ -12,15 +12,22 @@ def index(request):
         body_unicode = request.body.decode("utf-8")
         body_data = json.loads(body_unicode)
         try:
+            # assign post data in variables
             name = body_data.get("exerciseName")
             hours = int(body_data.get("hours"))
             min = int(body_data.get("mins"))
-            xrsyz = Exercise.objects.get(name=name)
+            try:
+                # check if exercise already exists
+                xrsyz = Exercise.objects.get(name=name)
+            except Exercise.DoesNotExist:
+                xrsyz = None
             if xrsyz:
+                # if exists , update the hours and mins
                 xrsyz.hours = xrsyz.hours + hours
                 xrsyz.min = xrsyz.min + min
                 xrsyz.save()
             else:
+                # if not exists, create new entry
                 xrsyz = Exercise.objects.create(name=name, hours=hours, min=min)
                 xrsyz.save()
             return HttpResponse(xrsyz, content_type="application/json")
