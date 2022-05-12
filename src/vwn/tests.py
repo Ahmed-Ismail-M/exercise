@@ -38,7 +38,13 @@ class IndexTest(TestCase):
         )
 
     def test4_get_days(self):
-        response = self.client.get("/api/v1/exercises/days")
+        response = self.client.get("/api/v1/exercises/days/months")
+        self.assertEqual(
+            response.content.decode("utf-8"),
+            json.dumps({"total days": 2, "total hrs": 1.0}),
+        )
+    def test5_get_heighest_month(self):
+        response = self.client.get("/api/v1/exercises/month/years")
         self.assertEqual(
             response.content.decode("utf-8"),
             json.dumps({"total days": 2, "total hrs": 1.0}),

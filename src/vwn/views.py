@@ -47,17 +47,17 @@ def get_cur_month_days(request):
     )  # filter days within the current month
     days, hrs = to_days(exercises=exercises)  # calculate days
     return HttpResponse(
-        json.dumps({"total days": days, 'total hrs': hrs}),
+        json.dumps({"total days": days, "total hrs": hrs}),
         content_type="application/json",
     )
 
-def get_cur_year_highest_days(request):
+
+def get_cur_year_highest_month(request):
     exercises = Exercise.objects.filter(
-        created_at__month__gte=datetime.now().year,
-    )  # filter days within the current month
-    days, hrs = to_days(exercises=exercises)  # calculate days
+        created_at__year__gte=datetime.now().year,
+    ).values('hours').annotate(created_count=Count('id'))  # filter days within the current month
+    print(exercises)
     return HttpResponse(
-        json.dumps({"total days": days, 'total hrs': hrs}),
+        'todo',
         content_type="application/json",
     )
-
