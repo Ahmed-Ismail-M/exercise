@@ -9,7 +9,7 @@ class IndexTest(TestCase):
         response = self.client.post(
             "/", data=json_data, content_type="application/json"
         )
-        self.assertEqual(response.content.decode("utf-8"), data['exerciseName'])
+        self.assertEqual(response.content.decode("utf-8"), data["exerciseName"])
 
     def test2_index(self):
         response = self.client.get("/")
@@ -25,7 +25,8 @@ class IndexTest(TestCase):
             "/", data=json_data, content_type="application/json"
         )
         self.assertEqual(
-            response.content.decode("utf-8") , "ERROR: NOT NULL constraint failed: vwn_exercise.hours"
+            response.content.decode("utf-8"),
+            "ERROR: int() argument must be a string, a bytes-like object or a number, not 'NoneType'",
         )
 
     def test4_get_days(self):
