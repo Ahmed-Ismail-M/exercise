@@ -23,7 +23,7 @@ class IndexTest(TestCase):
         response = self.client.get("/")
         self.assertEqual(
             response.content,
-            b"Please provide user_id(int), exerciseName(string),hours(tinyint),mins(tinyint))",
+            b"Please provide exerciseName(string),hours(tinyint),mins(tinyint))",
         )
 
     def test3_missing_hours(self):
@@ -41,5 +41,5 @@ class IndexTest(TestCase):
         response = self.client.get("/exercises")
         self.assertEqual(
             response.content.decode("utf-8"),
-            "todo",
+            json.dumps({"total days": 1.0}),
         )

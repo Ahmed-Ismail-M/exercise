@@ -36,14 +36,24 @@ def index(request):
                 f"ERROR: {e.__str__()}", content_type="application/json"
             )
     return HttpResponse(
-        "Please provide user_id(int), exerciseName(string),hours(tinyint),mins(tinyint))",
+        "Please provide exerciseName(string),hours(tinyint),mins(tinyint))",
         content_type="application/json",
     )
 
 
-def get_days(request):
+def get_cur_month_days(request):
     exercises = Exercise.objects.all().filter(
         created_at__month__gte=datetime.now().month,
+    )  # filter days within the current month
+    days = to_days(exercises=exercises)  # calculate days
+    return HttpResponse(
+        json.dumps({"total days": days}),
+        content_type="application/json",
+    )
+
+def get_cur_year_highest_days(request):
+    exercises = Exercise.objects.all().filter(
+        created_at__month__gte=datetime.now().year,
     )  # filter days within the current month
     days = to_days(exercises=exercises)  # calculate days
     return HttpResponse(

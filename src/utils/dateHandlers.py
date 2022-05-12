@@ -7,3 +7,4 @@ def to_days(exercises: QuerySet) -> float:
         mins += xrsyz.min
     hrs += mins / 60
     return hrs / 24
+
