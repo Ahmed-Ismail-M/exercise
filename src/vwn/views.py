@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.db.models.query import QuerySet
 from vwn.models import Exercise
 from django.views.decorators.csrf import csrf_exempt
 
@@ -43,10 +43,18 @@ def index(request):
 
 def get_days(request):
     exercises = Exercise.objects.all()
-    print(exercises)
-    for xrsyz in exercises:
-        print(xrsyz.hours, " printing hours")
+    days = calculate_days(exercises=exercises)
     return HttpResponse(
-        "todo",
+        json.dumps({'total days': days}),
         content_type="application/json",
     )
+
+
+def calculate_days(exercises: QuerySet)-> float:
+    hrs = 0
+    mins = 0
+    for xrsyz in exercises:
+        hrs += xrsyz.hours
+        mins += xrsyz.min
+    hrs += mins/60
+    return hrs/24

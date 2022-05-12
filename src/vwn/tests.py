@@ -1,8 +1,16 @@
 import json
 from django.test import TestCase
 
+from vwn.models import Exercise
+
 
 class IndexTest(TestCase):
+    def setUp(self) -> None:
+        xrsyz = Exercise.objects.create(name='test', hours=0, min=30)
+        xrsyz.save()
+        xrsyz = Exercise.objects.create(name='test2', hours=23, min=30)
+        xrsyz.save()
+
     def test1_post(self):
         data = {"exerciseName": "test", "hours": 2, "mins": 3}
         json_data = json.dumps(data)
