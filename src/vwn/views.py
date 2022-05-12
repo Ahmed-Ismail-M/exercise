@@ -16,19 +16,8 @@ def index(request):
             name = body_data.get("exerciseName")
             hours = int(body_data.get("hours"))
             min = int(body_data.get("mins"))
-            # try:
-            #     # check if exercise already exists
-            #     xrsyz = Exercise.objects.get(name=name)
-            # except Exercise.DoesNotExist:
-            #     xrsyz = None
-            # if xrsyz:
-            #     # if exists , update the hours and mins
-            #     xrsyz.hours = xrsyz.hours + hours
-            #     xrsyz.min = xrsyz.min + min
-            #     xrsyz.save()
-            # else:
-            #     # if not exists, create new entry
             xrsyz = Exercise.objects.create(name=name, hours=hours, min=min)
+            xrsyz.clean()
             xrsyz.save()
             return HttpResponse(xrsyz, content_type="application/json")
         except Exception as e:
@@ -42,10 +31,14 @@ def index(request):
 
 
 def get_cur_month_days(request):
-    exercises = Exercise.objects.all().filter(
-        created_at__month__gte=datetime.now().month,
+    today = datetime.now()
+    exercises = Exercise.objects.filter(
+        created_at__year=today.year, created_at__month=today.month
     )  # filter days within the current month
+    for ex in exercises:
+        print(ex.created_at)
     days, hrs = to_days(exercises=exercises)  # calculate days
+    print(days, hrs)
     return HttpResponse(
         json.dumps({"total days": days, "total hrs": hrs}),
         content_type="application/json",
@@ -53,11 +46,15 @@ def get_cur_month_days(request):
 
 
 def get_cur_year_highest_month(request):
-    exercises = Exercise.objects.filter(
-        created_at__year__gte=datetime.now().year,
-    ).values('hours').annotate(created_count=Count('id'))  # filter days within the current month
+    exercises = (
+        Exercise.objects.filter(
+            created_at__year__gte=datetime.now().year,
+        )
+        .values("hours")
+        .annotate(created_count=Count("id"))
+    )  # filter days within the current month
     print(exercises)
     return HttpResponse(
-        'todo',
+        "todo",
         content_type="application/json",
     )
