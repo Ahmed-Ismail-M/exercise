@@ -1,8 +1,7 @@
 from datetime import datetime
 import json
-from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models.query import QuerySet
+from utils.dateHandlers import to_days
 from vwn.models import Exercise
 from django.views.decorators.csrf import csrf_exempt
 
@@ -43,20 +42,12 @@ def index(request):
 
 
 def get_days(request):
-    currentMonth = datetime.now().month
-    exercises = Exercise.objects.all().filter(created_at__month__gte=currentMonth,) # filter days within the current month
-    days = calculate_days(exercises=exercises) #calculate days
+    exercises = Exercise.objects.all().filter(
+        created_at__month__gte=datetime.now().month,
+    )  # filter days within the current month
+    days = to_days(exercises=exercises)  # calculate days
     return HttpResponse(
-        json.dumps({'total days': days}),
+        json.dumps({"total days": days}),
         content_type="application/json",
     )
 
-
-def calculate_days(exercises: QuerySet)-> float:
-    hrs = 0
-    mins = 0
-    for xrsyz in exercises:
-        hrs += xrsyz.hours
-        mins += xrsyz.min
-    hrs += mins/60
-    return hrs/24
