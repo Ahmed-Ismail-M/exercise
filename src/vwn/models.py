@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Exercise(models.Model):
-    name = models.CharField(max_length=255, null=False, unique=True)
+    name = models.CharField(max_length=255, null=False)
     hours = models.SmallIntegerField()
     min = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

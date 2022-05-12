@@ -6,9 +6,9 @@ from vwn.models import Exercise
 
 class IndexTest(TestCase):
     def setUp(self) -> None:
-        xrsyz = Exercise.objects.create(name='test', hours=0, min=30)
+        xrsyz = Exercise.objects.create(name='test', hours=24, min=30)
         xrsyz.save()
-        xrsyz = Exercise.objects.create(name='test2', hours=23, min=30)
+        xrsyz = Exercise.objects.create(name='test', hours=24, min=30)
         xrsyz.save()
 
     def test1_post(self):
@@ -41,5 +41,5 @@ class IndexTest(TestCase):
         response = self.client.get("/api/v1/exercises/days")
         self.assertEqual(
             response.content.decode("utf-8"),
-            json.dumps({"total days": 1.0}),
+            json.dumps({"total days": 2, "total hrs": 1.0}),
         )
